@@ -1,14 +1,12 @@
 package Ajou.ucandoit.dto;
 
 import Ajou.ucandoit.domain.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
 @NoArgsConstructor
 @Builder
+@ToString
 public class UserSaveRequestDto {
     private String userName;
     private String pwd;

@@ -29,11 +29,13 @@ public class User {
 
     private String pwd;
 
+    private String salt;
+
     private String email;
 
     private String nickName;
 
     @Temporal(TemporalType.DATE)
     @CreatedDate
-    private Date updatedBy;
+    private Date createdAt;
 }

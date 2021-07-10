@@ -43,4 +43,11 @@ public class SecurityService {
 
         return claims.getSubject();
     }
+
+    public Claims getClamims(String token) {
+        return Jwts.parser()
+                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                .parseClaimsJws(token) // 토큰을 넣어서 풀어줌
+                .getBody();
+    }
 }

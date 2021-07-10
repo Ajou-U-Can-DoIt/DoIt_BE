@@ -44,8 +44,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean verifyPwd(String pwd, String hashPwd) {
-        System.out.println("hashPwd = " + hashPwd);
-        System.out.println("pwd = " + pwd);
         return BCrypt.checkpw(pwd, hashPwd);
     }
 

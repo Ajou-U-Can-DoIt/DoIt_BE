@@ -30,8 +30,6 @@ public class User {
 
     private String pwd;
 
-    private String salt;
-
     private String email;
 
     private String nickName;

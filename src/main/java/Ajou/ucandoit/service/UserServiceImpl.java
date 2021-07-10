@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public int isVaildUserName(String userName) {
+    public int isValidUserName(String userName) {
         User vaildUserName = userRepository.isVaildUserName(userName);
 
         if(vaildUserName == null) return 0;

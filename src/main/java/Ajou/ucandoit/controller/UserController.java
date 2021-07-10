@@ -21,12 +21,12 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public Map<String, Object> signUp(@RequestBody  UserSaveRequestDto userSaveRequestDto) throws Exception {
+    public Map<String, Object> signUp(@RequestBody UserSaveRequestDto userSaveRequestDto) throws Exception {
         Map<String, Object> result = new LinkedHashMap<>();
 
         // 존재하는 아이디 체크 -> 에러, 같은 비번은 프론트 체크.
         // 같은 아이디 있으면 -1, 없으면 0
-        int isVaildUserName = userService.isVaildUserName(userSaveRequestDto.getUserName());
+        int isVaildUserName = userService.isValidUserName(userSaveRequestDto.getUserName());
         if(isVaildUserName == -1) throw new Exception("이미 존재하는 아이디입니다.");
 
         // salt 처리하고, pwd salt 처리된거로 업데이트

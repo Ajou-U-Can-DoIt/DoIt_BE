@@ -8,7 +8,7 @@ import java.util.Map;
 public interface UserService {
     String signUp(User user);
 
-    int isVaildUserName(String userName);
+    int isValidUserName(String userName);
 
     String hashPwd(String pwd);
 }

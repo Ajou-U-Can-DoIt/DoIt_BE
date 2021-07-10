@@ -1,15 +1,11 @@
 package Ajou.ucandoit.service;
 
 import Ajou.ucandoit.domain.User;
-import Ajou.ucandoit.dto.UserSaveRequestDto;
 import Ajou.ucandoit.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -29,7 +25,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public int isValidUserName(String userName) {
-        User vaildUserName = userRepository.isVaildUserName(userName);
+        User vaildUserName = userRepository.findByUserName(userName);
 
         if(vaildUserName == null) return 0;
         else return -1;
@@ -39,6 +35,18 @@ public class UserServiceImpl implements UserService{
     public String hashPwd(String pwd) {
         String salt = BCrypt.gensalt();
         return BCrypt.hashpw(pwd, salt);
+    }
+
+    @Override
+    public User getUserByUserName(String userName) {
+        return userRepository.findByUserName(userName);
+    }
+
+    @Override
+    public boolean verifyPwd(String pwd, String hashPwd) {
+        System.out.println("hashPwd = " + hashPwd);
+        System.out.println("pwd = " + pwd);
+        return BCrypt.checkpw(pwd, hashPwd);
     }
 
 }

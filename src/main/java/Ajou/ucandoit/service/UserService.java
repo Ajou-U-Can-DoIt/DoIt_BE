@@ -11,4 +11,8 @@ public interface UserService {
     int isValidUserName(String userName);
 
     String hashPwd(String pwd);
+
+    User getUserByUserName(String userName);
+
+    boolean verifyPwd(String pwd, String hashPwd);
 }

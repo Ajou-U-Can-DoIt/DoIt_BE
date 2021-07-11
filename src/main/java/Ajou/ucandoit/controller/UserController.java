@@ -10,6 +10,7 @@ import Ajou.ucandoit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -68,6 +69,7 @@ public class UserController {
 
         result.put("msg", "로그인에 성공했습니다.");
         result.put("token", token);
+        // 리프래시 토큰 쿠키 주입 !
 
         return result;
     }
@@ -78,7 +80,32 @@ public class UserController {
         return "hello";
     }
 
-//    @PostMapping("/refresh")
-//    public Map<String, Object> refresh(@RequestAttribute )
+    @PostMapping("/refresh")
+    public Map<String, Object> refresh(@CookieValue(value = "refresh") Cookie cookie) {
+        Map<String, Object> result = new LinkedHashMap<>();
+
+        String token = cookie.getValue();
+        Auth refreshToken = securityService.getRefreshToken(token);
+
+        if(refreshToken == null) throw new IllegalArgumentException("잘못된 Refresh Token 입니다.");
+
+        if(securityService.checkValidationRefresh(refreshToken)){
+            String accessToken = securityService.createToken(refreshToken.getSubject());
+
+            securityService.deleteRefreshToken(refreshToken.getId());
+            Auth newRefreshToken = securityService.createRefreshToken(accessToken, refreshToken.getSubject());
+            securityService.saveRefreshToken(newRefreshToken);
+
+            result.put("msg", "토큰 재발급에 성공했습니다.");
+            result.put("token", accessToken);
+            // 쿠키 넣기
+            return result;
+
+        } else{
+            //delete
+            securityService.deleteRefreshToken(refreshToken.getId());
+            throw new IllegalArgumentException("Refresh Token 유효기간이 지났습니다.");
+        }
+    }
 
 }

@@ -73,7 +73,17 @@ public class SecurityService {
         authRepository.save(auth);
     }
 
-    // check valid refresh
+    public Auth getRefreshToken(String token) {
+        return authRepository.findByRefreshToken(token);
+    }
 
-    // if has valid refresh -> gen access token
+    // check valid refresh
+    public boolean checkValidationRefresh(Auth auth) {
+        return auth.getExpireDate().isAfter(LocalDateTime.now());
+    }
+
+    public void deleteRefreshToken(Long id) {
+        authRepository.deleteById(id);
+    }
+
 }

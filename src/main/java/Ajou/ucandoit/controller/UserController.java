@@ -1,16 +1,14 @@
 package Ajou.ucandoit.controller;
 
 import Ajou.ucandoit.aspect.TokenRequired;
+import Ajou.ucandoit.domain.Auth;
 import Ajou.ucandoit.domain.User;
 import Ajou.ucandoit.dto.UserLoginRequestDto;
 import Ajou.ucandoit.dto.UserSaveRequestDto;
 import Ajou.ucandoit.security.SecurityService;
 import Ajou.ucandoit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -51,9 +49,10 @@ public class UserController {
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody UserLoginRequestDto userLoginRequestDto){
         Map<String, Object> result = new LinkedHashMap<>();
+        String subject = userLoginRequestDto.getUserName();
 
         //id로 user 정보 갖고오고, 없으면 에러
-        User user = userService.getUserByUserName(userLoginRequestDto.getUserName());
+        User user = userService.getUserByUserName(subject);
         if(user==null) throw new IllegalArgumentException("존재하지 않는 아이디입니다.");
 
         //pwd 체크 일치 하지 않으면 에러
@@ -61,7 +60,11 @@ public class UserController {
         if(!pwdCheck) throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 
         // 다 통과되면 토큰 발급
-        String token = securityService.createToken(userLoginRequestDto.getUserName());
+        String token = securityService.createToken(subject);
+
+        // gen refresh and save repo 2주짜리
+        Auth refreshToken = securityService.createRefreshToken(token, subject);
+        securityService.saveRefreshToken(refreshToken);
 
         result.put("msg", "로그인에 성공했습니다.");
         result.put("token", token);
@@ -74,5 +77,8 @@ public class UserController {
     public String tokenTest() {
         return "hello";
     }
+
+//    @PostMapping("/refresh")
+//    public Map<String, Object> refresh(@RequestAttribute )
 
 }

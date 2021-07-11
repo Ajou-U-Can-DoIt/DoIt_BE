@@ -1,18 +1,29 @@
 package Ajou.ucandoit.security;
 
+import Ajou.ucandoit.domain.Auth;
+import Ajou.ucandoit.repository.AuthRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
 public class SecurityService {
+
+    private final AuthRepository authRepository;
+
+    @Autowired
+    public SecurityService(AuthRepository authRepository) {
+        this.authRepository = authRepository;
+    }
 
     @Value("${jwt.secret}")
     private String SECRET_KEY; // 이건 나중에 숨겨야함
@@ -48,4 +59,21 @@ public class SecurityService {
                 .parseClaimsJws(token) // 토큰을 넣어서 풀어줌
                 .getBody();
     }
+
+    // generate refresh token func
+    public Auth createRefreshToken(String token, String subject) {
+        return Auth.builder()
+                .refreshToken(token)
+                .expireDate(LocalDateTime.now().plusWeeks(2))
+                .subject(subject)
+                .build();
+    }
+
+    public void saveRefreshToken(Auth auth) {
+        authRepository.save(auth);
+    }
+
+    // check valid refresh
+
+    // if has valid refresh -> gen access token
 }

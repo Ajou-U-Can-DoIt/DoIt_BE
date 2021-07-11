@@ -43,6 +43,10 @@ dependencies {
 	//aop
 	implementation 'org.springframework.boot:spring-boot-starter-aop:2.5.2'
 
+	// 스웨거
+	// https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+
 
 }
 

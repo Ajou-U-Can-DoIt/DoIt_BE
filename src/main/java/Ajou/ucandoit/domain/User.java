@@ -1,8 +1,13 @@
 package Ajou.ucandoit.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 /*
 @Entity: DB의 테이블을 뜻함
 @Table: DB 테이블의 이름을 명시 (테이블 명과 클래스 명이 동일하면 따로 설정하지 않아도 됨)
@@ -20,12 +25,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // like MySQL AI
     private Long id;
-    @Column(nullable = false)
-    private String account;
+
+    private String userName;
+
+    private String pwd;
+
     private String email;
-    private String phoneNumber;
-    @Column(nullable = false)
-    private String createdBy;
-    private LocalDateTime updatedAt;
-    private String updatedBy;
+
+    private String nickName;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date createdAt;
 }

@@ -1,12 +1,12 @@
 package Ajou.ucandoit.security;
 
+import Ajou.ucandoit.domain.Auth;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,22 +21,40 @@ public class SecurityController {
         this.securityService = securityService;
     }
 
-    @GetMapping("/create/token") //  아이디 비번을 제대로 받아서 바꾸는거로 로직 변경해야함
-    public Map<String, Object> createToken(@RequestParam String subject) {
-        String token = securityService.createToken(subject); //2분
+    @PostMapping("/refresh")
+    public Map<String, Object> refresh(@CookieValue(value = "refresh") Cookie cookie, HttpServletResponse response) {
+        Map<String, Object> result = new LinkedHashMap<>();
 
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("result", token);
-        return map;
-    }
+        String token = cookie.getValue();
+        Auth refreshToken = securityService.getRefreshToken(token);
 
-    @GetMapping("/get/subject")
-    public Map<String, Object> getSubject(@RequestParam String token) {
-        String subject = securityService.getSubject(token);
+        if(refreshToken == null) throw new IllegalArgumentException("잘못된 Refresh Token 입니다.");
 
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("result", subject);
-        return map;
+        if(securityService.checkValidationRefresh(refreshToken)){
+            String accessToken = securityService.createToken(refreshToken.getSubject());
+
+            securityService.deleteRefreshToken(refreshToken.getSubject());
+
+            Auth newRefreshToken = securityService.createRefreshToken(accessToken, refreshToken.getSubject());
+            securityService.saveRefreshToken(newRefreshToken);
+
+            result.put("msg", "토큰 재발급에 성공했습니다.");
+            result.put("token", accessToken);
+
+            // 리프래시 토큰 쿠키 주입 !
+            Cookie refreshCookie = new Cookie("refresh", newRefreshToken.getRefreshToken());
+            refreshCookie.setMaxAge(60*60*24*14);
+            refreshCookie.setPath("/"); // 모든 경로에서 접근 가능 하도록 설정
+            refreshCookie.setHttpOnly(true);
+            response.addCookie(refreshCookie);
+
+            return result;
+
+        } else{
+            //delete
+            securityService.deleteRefreshToken(refreshToken.getSubject());
+            throw new IllegalArgumentException("Refresh Token 유효기간이 지났습니다.");
+        }
     }
 
 }

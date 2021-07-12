@@ -82,8 +82,8 @@ public class SecurityService {
         return auth.getExpireDate().isAfter(LocalDateTime.now());
     }
 
-    public void deleteRefreshToken(Long id) {
-        authRepository.deleteById(id);
+    public void deleteRefreshToken(String subject) {
+        authRepository.deleteBySubject(subject);
     }
 
 }

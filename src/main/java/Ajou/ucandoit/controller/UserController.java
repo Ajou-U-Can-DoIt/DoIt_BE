@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -48,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody UserLoginRequestDto userLoginRequestDto){
+    public Map<String, Object> login(@RequestBody UserLoginRequestDto userLoginRequestDto, HttpServletResponse response){
         Map<String, Object> result = new LinkedHashMap<>();
         String subject = userLoginRequestDto.getUserName();
 
@@ -65,47 +67,20 @@ public class UserController {
 
         // gen refresh and save repo 2주짜리
         Auth refreshToken = securityService.createRefreshToken(token, subject);
+        securityService.deleteRefreshToken(refreshToken.getSubject());
         securityService.saveRefreshToken(refreshToken);
 
         result.put("msg", "로그인에 성공했습니다.");
         result.put("token", token);
+
         // 리프래시 토큰 쿠키 주입 !
+        Cookie refreshCookie = new Cookie("refresh", refreshToken.getRefreshToken());
+        refreshCookie.setMaxAge(60*60*24*14);
+        refreshCookie.setPath("/"); // 모든 경로에서 접근 가능 하도록 설정
+        refreshCookie.setHttpOnly(true);
+        response.addCookie(refreshCookie);
 
         return result;
-    }
-
-    @GetMapping("/tokenTest")
-    @TokenRequired
-    public String tokenTest() {
-        return "hello";
-    }
-
-    @PostMapping("/refresh")
-    public Map<String, Object> refresh(@CookieValue(value = "refresh") Cookie cookie) {
-        Map<String, Object> result = new LinkedHashMap<>();
-
-        String token = cookie.getValue();
-        Auth refreshToken = securityService.getRefreshToken(token);
-
-        if(refreshToken == null) throw new IllegalArgumentException("잘못된 Refresh Token 입니다.");
-
-        if(securityService.checkValidationRefresh(refreshToken)){
-            String accessToken = securityService.createToken(refreshToken.getSubject());
-
-            securityService.deleteRefreshToken(refreshToken.getId());
-            Auth newRefreshToken = securityService.createRefreshToken(accessToken, refreshToken.getSubject());
-            securityService.saveRefreshToken(newRefreshToken);
-
-            result.put("msg", "토큰 재발급에 성공했습니다.");
-            result.put("token", accessToken);
-            // 쿠키 넣기
-            return result;
-
-        } else{
-            //delete
-            securityService.deleteRefreshToken(refreshToken.getId());
-            throw new IllegalArgumentException("Refresh Token 유효기간이 지났습니다.");
-        }
     }
 
 }

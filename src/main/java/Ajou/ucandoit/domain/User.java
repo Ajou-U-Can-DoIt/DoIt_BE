@@ -1,6 +1,7 @@
 package Ajou.ucandoit.domain;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -29,13 +30,11 @@ public class User {
 
     private String pwd;
 
-    private String salt;
-
     private String email;
 
     private String nickName;
 
-    @Temporal(TemporalType.DATE)
-    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date createdAt;
 }

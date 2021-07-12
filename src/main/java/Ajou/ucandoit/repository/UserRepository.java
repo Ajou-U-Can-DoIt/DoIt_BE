@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select o from User o where o.userName = ?1")
-    User isVaildUserName(String userName);
+    User findByUserName(String userName);
 }

@@ -3,6 +3,8 @@ package Ajou.ucandoit.dto;
 import Ajou.ucandoit.domain.User;
 import lombok.*;
 
+import java.util.Map;
+
 @Getter @Setter
 @NoArgsConstructor
 @Builder
@@ -20,11 +22,12 @@ public class UserSaveRequestDto {
         this.nickname = nickname;
     }
 
-    public User toEntity() {
+    public User toEntity(String hashPwd) {
         return User.builder()
                 .userName(userName)
                 .email(email)
-                .pwd(pwd)
-                .nickName(nickname).build();
+                .pwd(hashPwd)
+                .nickName(nickname)
+                .build();
     }
 }

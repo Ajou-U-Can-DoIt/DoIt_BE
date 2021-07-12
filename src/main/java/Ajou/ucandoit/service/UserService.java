@@ -1,9 +1,18 @@
 package Ajou.ucandoit.service;
 
+import Ajou.ucandoit.domain.User;
 import Ajou.ucandoit.dto.UserSaveRequestDto;
 
-public interface UserService {
-    String signUp(UserSaveRequestDto userSaveRequestDto);
+import java.util.Map;
 
-    int isVaildUserName(String userName);
+public interface UserService {
+    String signUp(User user);
+
+    int isValidUserName(String userName);
+
+    String hashPwd(String pwd);
+
+    User getUserByUserName(String userName);
+
+    boolean verifyPwd(String pwd, String hashPwd);
 }

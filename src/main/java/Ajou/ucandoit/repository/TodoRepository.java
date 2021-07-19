@@ -7,11 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-//@Repository
+@Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
-    List<Todo> findByCalenderId(Long calenderId);
-
-    Optional<Todo> findByUserId(Long Id);
+    Optional<Todo> findByUserId(Long id);
 
 }

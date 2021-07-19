@@ -21,23 +21,18 @@ public class TodoServiceImpl implements TodoService{
         this.todoRepository = todoRepository;
     }
 
-//    @Override
-//    public void createTodo(Todo todo) {
-//        todoRepository.save(todo);
-//    }
-//
-//    @Override
-//    public Todo modifyTodo() {
-//        return null;
-//    }
-//
-//    @Override
-//    public List<Todo> findTodo(Long calenderId) {
-//        return todoRepository.findByCalenderId(calenderId);
-//    }
-
     @Override
     public Optional<Todo> findTodoById(Long userid) {
         return todoRepository.findByUserId(userid);
     }
+
+    @Override
+    public Long registerTodo(Todo todo) {
+        todoRepository.save(todo);
+        return todo.getId();
+    }
+
+
+
+
 }

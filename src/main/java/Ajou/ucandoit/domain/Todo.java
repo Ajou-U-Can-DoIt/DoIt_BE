@@ -1,13 +1,17 @@
 package Ajou.ucandoit.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.*;
+
+import javax.persistence.*;
 import java.util.Date;
 //import java.sql.Date;
 
 @Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +27,8 @@ public class Todo {
     private Date start;
     private Date end;
 
-    //calendar id
-    private Long calendarId;
+    //calendar id : fk
+    @ManyToOne
+    @JoinColumn(name = "calender_id")
+    private Calendar calendar;
 }

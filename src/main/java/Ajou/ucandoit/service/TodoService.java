@@ -7,4 +7,7 @@ import java.util.Optional;
 
 public interface TodoService {
     Optional<Todo> findTodoById(Long userid);
+
+    Long registerTodo(Todo todo);
+
 }

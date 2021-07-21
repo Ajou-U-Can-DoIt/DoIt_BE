@@ -73,15 +73,17 @@ class TodoControllerTest {
     @Test
     void 일정_조회() {
         //given
-        Calendar calendar = Calendar.builder().id(1L).build();
-        todoRepository.save(Todo.builder().title("test").content("content").calendar(calendar).build());
-        todoRepository.save(Todo.builder().title("test1").content("content1").calendar(calendar).build());
-
+        Todo todo = todoRepository.save(Todo.builder().title("test").content("content").build());
+        
         //when
-        List<TodoListResponseDto> todoList = todoService.findByCalendar(1L);
+        Long id = todo.getId();
+        
+        Todo findTodo = todoService.findTodoById(id);
+        
+        TodoListResponseDto responseDto = new TodoListResponseDto(findTodo);
 
         //then
-        Assertions.assertThat(todoList.size()).isEqualTo(2);
+        Assertions.assertThat(responseDto.getContent()).isEqualTo("content");
     }
 
 }

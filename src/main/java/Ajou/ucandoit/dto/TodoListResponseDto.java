@@ -26,8 +26,8 @@ public class TodoListResponseDto {
     public TodoListResponseDto(Todo entity)
     {
         this.title = entity.getTitle();
-        //this.start = entity.getStart().toString();
-        //this.end = entity.getEnd().toString();
+        this.start = entity.getStart().toString();
+        this.end = entity.getEnd().toString();
 
         this.start = formatter.format(entity.getStart());
         this.end = formatter.format(entity.getEnd());

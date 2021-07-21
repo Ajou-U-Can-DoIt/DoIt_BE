@@ -27,8 +27,8 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     @Transactional
-    public List<TodoListResponseDto> findByCalendar(Long calendar) {
-        return todoRepository.findByCalendar(calendar);
+    public Todo findTodoById(Long id) {
+        return todoRepository.findById(id).get();
     }
 
     @Override

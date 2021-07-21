@@ -11,7 +11,8 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TodoSaveRequestDto {
+public class TodoUpdateRequestDto {
+    private Long id;
     private String title;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -32,7 +33,7 @@ public class TodoSaveRequestDto {
 
     public Todo toEntity() {
         return Todo.builder()
-//                .id(id)
+                .id(id)
                 .title(title)
                 .start(start)
                 .end(end)
@@ -43,5 +44,4 @@ public class TodoSaveRequestDto {
                 .content(content)
                 .build();
     }
-
 }

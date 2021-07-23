@@ -3,8 +3,9 @@ jdk :
   - openjdk11
 
 branches:
-  - master
-  - develop
+  only:
+    - master
+    - develop
 
 before_install:
   - chmod +x gradlew
@@ -14,7 +15,23 @@ cache:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
-script: "./gradlew clean build"
+before_deploy:
+  - zip -r DoIt_BE *
+  - mkdir -p deploy
+  - mv DoIt_BE.zip deploy/DoIt_BE.zip
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: travis-build
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private
+    local_dir: deploy
+    wait-until-deployed: true
+
+#script: "./gradlew clean build"
 
 notifications:
   email:

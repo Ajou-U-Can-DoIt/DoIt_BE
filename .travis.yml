@@ -34,6 +34,18 @@ deploy:
     wait-until-deployed: true
     on:
       branch: develop
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: travis-build
+    key: DoIt_BE.zip
+    bundle_type: zip
+    application: travis-deploy
+    deployment_group: travis-webservice-group
+    region: ap-northeast-2
+    wait-until-deployed: true
+    on:
+      branch: develop
 
 
 notifications:

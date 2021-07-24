@@ -34,4 +34,4 @@ sleep 1
 
 echo "> $JAR_NAME 실행"
 
-java -jar $JAR_NAME &
+java -jar $JAR_NAME

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Member;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,11 +26,11 @@ public class TodoServiceImpl implements TodoService{
         this.todoRepository = todoRepository;
     }
 
-    @Override
-    @Transactional
-    public Todo findTodoById(Long id) {
-        return todoRepository.findById(id).get();
-    }
+//    @Override
+//    @Transactional
+//    public Todo findTodoById(Long id) {
+//        return todoRepository.findById(id).get();
+//    }
 
     @Override
     @Transactional
@@ -45,4 +46,20 @@ public class TodoServiceImpl implements TodoService{
         todoRepository.save(updateRequestDto.toEntity());
         return updateRequestDto.getId();
     }
+
+    @Override
+    @Transactional
+    public List<TodoListResponseDto> getTodoList(Long calendarId) {
+        List<Todo> todos = todoRepository.findByCalendar_Id(calendarId);
+        List<TodoListResponseDto> listResponseDtos = new ArrayList<>();
+
+        for(Todo todo : todos) {
+            TodoListResponseDto listResponseDto = new TodoListResponseDto(todo);
+            listResponseDtos.add(listResponseDto);
+        }
+
+        return listResponseDtos;
+    }
+
+
 }

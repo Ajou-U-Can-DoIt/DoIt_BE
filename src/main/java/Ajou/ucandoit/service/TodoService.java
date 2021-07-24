@@ -10,9 +10,11 @@ import java.util.Optional;
 
 public interface TodoService {
 
-    Todo findTodoById(Long id);
+    //Todo findTodoById(Long id);
 
     Long saveTodo(TodoSaveRequestDto todoSaveRequestDto);//일정 등록
 
-    Long update(TodoUpdateRequestDto updateRequestDto);
+    Long update(TodoUpdateRequestDto updateRequestDto);//일정 수정
+
+    List<TodoListResponseDto> getTodoList(Long calendarId);//일정 조회
 }

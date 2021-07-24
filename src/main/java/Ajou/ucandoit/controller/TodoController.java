@@ -27,12 +27,11 @@ public class TodoController {
         this.todoService = todoService;
     }
 
-    //어떤 일정 조회?
+    //list형식
     @GetMapping("/{id}")
-    public TodoListResponseDto checkTodo(@PathVariable Long id) {
-        TodoListResponseDto todoListResponseDto =
-                new TodoListResponseDto(todoService.findTodoById(id));
-        return todoListResponseDto;
+    public List<TodoListResponseDto> checkTodo(@PathVariable Long id) {
+        List<TodoListResponseDto> todoList = todoService.getTodoList(id);
+        return null;
     }
 
     @PostMapping("/add")

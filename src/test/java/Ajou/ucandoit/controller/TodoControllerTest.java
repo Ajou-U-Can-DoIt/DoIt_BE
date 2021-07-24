@@ -7,6 +7,7 @@ import Ajou.ucandoit.dto.TodoListResponseDto;
 import Ajou.ucandoit.dto.TodoSaveRequestDto;
 import Ajou.ucandoit.dto.TodoUpdateRequestDto;
 import Ajou.ucandoit.dto.UserSaveRequestDto;
+import Ajou.ucandoit.repository.CalendarRepository;
 import Ajou.ucandoit.repository.TodoRepository;
 import Ajou.ucandoit.repository.UserRepository;
 import Ajou.ucandoit.service.TodoService;
@@ -20,8 +21,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,11 +35,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class TodoControllerTest {
     TodoService todoService;
     TodoRepository todoRepository;
+    CalendarRepository calendarRepository;
 
     @Autowired
-    public TodoControllerTest(TodoService todoService, TodoRepository todoRepository) {
+    public TodoControllerTest(TodoService todoService, TodoRepository todoRepository, CalendarRepository calendarRepository) {
         this.todoService = todoService;
         this.todoRepository = todoRepository;
+        this.calendarRepository = calendarRepository;
     }
 
     @AfterEach
@@ -73,17 +80,36 @@ class TodoControllerTest {
     @Test
     void 일정_조회() {
         //given
-        Todo todo = todoRepository.save(Todo.builder().title("test").content("content").build());
-        
+        Calendar calendar = calendarRepository.save(Calendar.builder().build());
+        Long calendarId = calendar.getId();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        try {
+            Todo todo1 = todoRepository.save(Todo.builder()
+                    .title("test1")
+                    .content("content1")
+                    .calendar(calendar)
+                    .alarm(dateFormat.parse("2000-11-30"))
+                    .category("test")
+                    .end(dateFormat.parse("2000-11-30"))
+                    .start(dateFormat.parse("2000-11-30"))
+                    .setRepeat("test").build());
+            Todo todo2 = todoRepository.save(Todo.builder()
+                    .title("test2")
+                    .content("content2")
+                    .calendar(calendar)
+                    .alarm(dateFormat.parse("2000-11-30"))
+                    .category("test")
+                    .end(dateFormat.parse("2000-11-30"))
+                    .start(dateFormat.parse("2000-11-30"))
+                    .setRepeat("test").build());
+        }
+        catch (Exception e){}
+
         //when
-        Long id = todo.getId();
-        
-        Todo findTodo = todoService.findTodoById(id);
-        
-        TodoListResponseDto responseDto = new TodoListResponseDto(findTodo);
+        List<TodoListResponseDto> result = todoService.getTodoList(calendarId);
 
         //then
-        Assertions.assertThat(responseDto.getContent()).isEqualTo("content");
+        Assertions.assertThat(result.size()).isEqualTo(2);
     }
 
 }

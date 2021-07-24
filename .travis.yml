@@ -4,7 +4,6 @@ jdk :
 
 branches:
   only:
-    - develop
     - master
 
 before_install:
@@ -57,3 +56,4 @@ notifications:
   email:
     recipients:
       - hyotaek9812@gmail.com
+      - gkwls1130@ajou.ac.kr

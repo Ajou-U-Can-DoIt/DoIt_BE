@@ -43,7 +43,7 @@ public class UserController {
         // 저장
         String nickName = userService.signUp(userSaveRequestDto.toEntity(hashPwd));
 
-        result.put("msg", "회원가입을 완료했습니다.(테스트1)");
+        result.put("msg", "회원가입을 완료했습니다.(테스트2)");
         result.put("nickname", nickName);
 
         return result;

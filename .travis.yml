@@ -4,8 +4,8 @@ jdk :
 
 branches:
   only:
-    - master
     - develop
+    - master
 
 before_install:
   - chmod +x gradlew
@@ -25,6 +25,8 @@ before_deploy:
   - cd before-deploy && zip -r before-deploy *
   - cd ../ && mkdir -p deploy
   - mv before-deploy/before-deploy.zip deploy/DoIt_BE.zip
+  on:
+    branch: master
 
 
 deploy:
@@ -38,7 +40,7 @@ deploy:
     local_dir: deploy
     wait-until-deployed: true
     on:
-      branch: develop
+      branch: master
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
@@ -50,7 +52,7 @@ deploy:
     region: ap-northeast-2
     wait-until-deployed: true
     on:
-      branch: develop
+      branch: master
 
 
 notifications:

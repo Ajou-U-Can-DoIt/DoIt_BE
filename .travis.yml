@@ -25,8 +25,6 @@ before_deploy:
   - cd before-deploy && zip -r before-deploy *
   - cd ../ && mkdir -p deploy
   - mv before-deploy/before-deploy.zip deploy/DoIt_BE.zip
-  on:
-    branch: master
 
 
 deploy:
@@ -35,10 +33,10 @@ deploy:
     secret_access_key: $AWS_SECRET_KEY
     bucket: travis-build
     region: ap-northeast-2
-    skip_cleanup: true
+    cleanup: true
     acl: private
     local_dir: deploy
-    wait-until-deployed: true
+    wait_until_deployed: true
     on:
       branch: master
   - provider: codedeploy
@@ -50,7 +48,7 @@ deploy:
     application: travis-deploy
     deployment_group: travis-webservice-group
     region: ap-northeast-2
-    wait-until-deployed: true
+    wait_until_deployed: true
     on:
       branch: master
 

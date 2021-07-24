@@ -1,7 +1,6 @@
 #!/bin/bash
 
 REPOSITORY=/home/ec2-user/app/step2
-PROJECT_NAME=DoIt_BE
 PORT=8080
 
 echo "> Build 파일 복사"
@@ -31,6 +30,7 @@ echo "> JAR Name: $JAR_NAME"
 echo "> $JAR_NAME 에 실행권한 추가"
 
 chmod +x $JAR_NAME
+sleep 1
 
 echo "> $JAR_NAME 실행"
 

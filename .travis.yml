@@ -4,6 +4,7 @@ jdk :
 
 branches:
   only:
+    - develop
     - master
 
 before_install:
@@ -32,10 +33,9 @@ deploy:
     secret_access_key: $AWS_SECRET_KEY
     bucket: travis-build
     region: ap-northeast-2
-    cleanup: true
     acl: private
     local_dir: deploy
-    wait_until_deployed: true
+    wait-until-deployed: true
     on:
       branch: master
   - provider: codedeploy
@@ -47,7 +47,7 @@ deploy:
     application: travis-deploy
     deployment_group: travis-webservice-group
     region: ap-northeast-2
-    wait_until_deployed: true
+    wait-until-deployed: true
     on:
       branch: master
 

@@ -18,7 +18,8 @@ if [ -z "$CURRENT_PID" ]; then
 else
    echo "> kill -15 $CURRENT_PID"
    kill -15 $CURRENT_PID
-   sleep 5
+   sleep 5LIVE
+
 fi
 
 echo "> 새 어플리케이션 배포"
@@ -34,6 +35,4 @@ sleep 1
 
 echo "> $JAR_NAME 실행"
 
-nohup java -jar \
-$JAR_NAME \
-> /dev/null 2> /dev/null < /dev/null &
+nohup java -jar $JAR_NAME >> /home/ec2-user/deploy.log 2>/home/ec2-user/deploy_err.log &

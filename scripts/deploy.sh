@@ -18,13 +18,13 @@ if [ -z "$CURRENT_PID" ]; then
 else
    echo "> kill -15 $CURRENT_PID"
    kill -15 $CURRENT_PID
-   sleep 5LIVE
+   sleep 5
 
 fi
 
 echo "> 새 어플리케이션 배포"
 
-JAR_NAME=$(ls -tr $REPOSITORY/*.jar | haed -n 1)
+JAR_NAME=$(ls -tr $REPOSITORY/*.jar | head -n 1)
 
 echo "> JAR Name: $JAR_NAME"
 

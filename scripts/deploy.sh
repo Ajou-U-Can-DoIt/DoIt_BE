@@ -34,4 +34,6 @@ sleep 1
 
 echo "> $JAR_NAME 실행"
 
-nohup java -jar $JAR_NAME &
+nohup java -jar \
+/home/ec2-user/okky-like-1.0.0.jar \
+> /dev/null 2> /dev/null < /dev/null &

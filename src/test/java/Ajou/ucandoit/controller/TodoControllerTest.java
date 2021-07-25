@@ -112,4 +112,18 @@ class TodoControllerTest {
         Assertions.assertThat(result.size()).isEqualTo(2);
     }
 
+    @Test
+    void 일정_삭제() {
+        //given
+        Todo todo = todoRepository.save(Todo.builder().title("test").content("test").build());
+        Todo todo1 = todoRepository.save(Todo.builder().title("test1").content("test1").build());
+        Long id = todo.getId();
+
+        //when
+        todoService.delete(id);
+
+        //then
+        Assertions.assertThat(todoRepository.findAll().size()).isEqualTo(1);
+    }
+
 }

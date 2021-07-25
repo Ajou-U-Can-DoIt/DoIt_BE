@@ -31,7 +31,7 @@ public class TodoController {
     @GetMapping("/{id}")
     public List<TodoListResponseDto> checkTodo(@PathVariable Long id) {
         List<TodoListResponseDto> todoList = todoService.getTodoList(id);
-        return null;
+        return todoList;
     }
 
     @PostMapping("/add")
@@ -48,6 +48,11 @@ public class TodoController {
     public Long revisionTodo(@RequestBody TodoUpdateRequestDto updateRequestDto) {
         Map<String, Object> result = new LinkedHashMap<>();
         return todoService.update(updateRequestDto);
+    }
+
+    @DeleteMapping("/delete/{todo_id}")
+    public Long deleteTodo(@PathVariable Long todo_id) {
+        return todoService.delete(todo_id);
     }
 
     //상세 일정 조회

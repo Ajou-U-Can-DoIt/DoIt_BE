@@ -49,6 +49,15 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     @Transactional
+    public Long delete(Long todo_id) {
+        Todo todo = todoRepository.findById(todo_id).get();
+        Long deletedId = todo.getId();
+        todoRepository.delete(todo);
+        return deletedId;
+    }
+
+    @Override
+    @Transactional
     public List<TodoListResponseDto> getTodoList(Long calendarId) {
         List<Todo> todos = todoRepository.findByCalendar_Id(calendarId);
         List<TodoListResponseDto> listResponseDtos = new ArrayList<>();

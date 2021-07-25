@@ -57,6 +57,12 @@ public class TodoServiceImpl implements TodoService{
     }
 
     @Override
+    public String getDetail(Long todo_id) {
+        Todo todo = todoRepository.findById(todo_id).get();
+        return todo.getContent();
+    }
+
+    @Override
     @Transactional
     public List<TodoListResponseDto> getTodoList(Long calendarId) {
         List<Todo> todos = todoRepository.findByCalendar_Id(calendarId);

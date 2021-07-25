@@ -46,13 +46,23 @@ public class TodoController {
 
     @PutMapping("/revision")
     public Long revisionTodo(@RequestBody TodoUpdateRequestDto updateRequestDto) {
-        Map<String, Object> result = new LinkedHashMap<>();
+        //Map<String, Object> result = new LinkedHashMap<>();
         return todoService.update(updateRequestDto);
     }
 
     @DeleteMapping("/delete/{todo_id}")
     public Long deleteTodo(@PathVariable Long todo_id) {
         return todoService.delete(todo_id);
+    }
+
+    @GetMapping("/detail/{todo_id}")
+    public Map<String, Object> detailTodo(@PathVariable Long todo_id){
+        Map<String, Object> result = new LinkedHashMap<>();
+        String detail = todoService.getDetail(todo_id);
+        result.put("msg", "상세 일정 조회 성공");
+        result.put("detail", detail);
+
+        return result;
     }
 
     //상세 일정 조회

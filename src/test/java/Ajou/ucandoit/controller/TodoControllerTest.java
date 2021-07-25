@@ -113,6 +113,18 @@ class TodoControllerTest {
     }
 
     @Test
+    void 상세일정_조회() {
+        //given
+        Todo todo = todoRepository.save(Todo.builder().title("test").content("test").build());
+
+        //when
+        String detail = todoService.getDetail(todo.getId());
+
+        //then
+        Assertions.assertThat(detail).isEqualTo("test");
+    }
+
+    @Test
     void 일정_삭제() {
         //given
         Todo todo = todoRepository.save(Todo.builder().title("test").content("test").build());

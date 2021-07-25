@@ -18,5 +18,7 @@ public interface TodoService {
 
     Long delete(Long todo_id);
 
+    String getDetail(Long todo_id);
+
     List<TodoListResponseDto> getTodoList(Long calendarId);//일정 조회
 }

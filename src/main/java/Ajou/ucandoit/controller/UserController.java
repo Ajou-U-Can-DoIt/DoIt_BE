@@ -7,11 +7,13 @@ import Ajou.ucandoit.dto.UserLoginRequestDto;
 import Ajou.ucandoit.dto.UserSaveRequestDto;
 import Ajou.ucandoit.security.SecurityService;
 import Ajou.ucandoit.service.UserService;
+import Ajou.ucandoit.util.ResFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,8 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public Map<String, Object> signUp(@RequestBody UserSaveRequestDto userSaveRequestDto){
-        Map<String, Object> result = new LinkedHashMap<>();
+    public ResFormat signUp(@RequestBody UserSaveRequestDto userSaveRequestDto){
 
         // 존재하는 아이디 체크 -> 에러, 같은 비번은 프론트 체크.
         // 같은 아이디 있으면 -1, 없으면 0
@@ -43,15 +44,14 @@ public class UserController {
         // 저장
         String nickName = userService.signUp(userSaveRequestDto.toEntity(hashPwd));
 
-        result.put("msg", "회원가입을 완료했습니다.");
-        result.put("nickname", nickName);
+        Map<String , Object> result = new HashMap<>();
+        result.put("nickName", nickName);
 
-        return result;
+        return new ResFormat(true,201L, result);
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody UserLoginRequestDto userLoginRequestDto, HttpServletResponse response){
-        Map<String, Object> result = new LinkedHashMap<>();
+    public ResFormat login(@RequestBody UserLoginRequestDto userLoginRequestDto, HttpServletResponse response){
         String subject = userLoginRequestDto.getUserName();
 
         //id로 user 정보 갖고오고, 없으면 에러
@@ -70,9 +70,6 @@ public class UserController {
         securityService.deleteRefreshToken(refreshToken.getSubject());
         securityService.saveRefreshToken(refreshToken);
 
-        result.put("msg", "로그인에 성공했습니다.");
-        result.put("token", token);
-
         // 리프래시 토큰 쿠키 주입 !
         Cookie refreshCookie = new Cookie("refresh", refreshToken.getRefreshToken());
         refreshCookie.setMaxAge(60*60*24*14);
@@ -80,7 +77,11 @@ public class UserController {
         refreshCookie.setHttpOnly(true);
         response.addCookie(refreshCookie);
 
-        return result;
+        Map<String , Object> result = new HashMap<>();
+        result.put("token", token);
+
+        return new ResFormat(true,201L,result);
+
     }
 
     @PostMapping("/logout")

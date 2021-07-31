@@ -1,6 +1,7 @@
 package Ajou.ucandoit.security;
 
 import Ajou.ucandoit.domain.Auth;
+import Ajou.ucandoit.util.ResFormat;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class SecurityController {
     }
 
     @PostMapping("/refresh")
-    public Map<String, Object> refresh(@CookieValue(value = "refresh") Cookie cookie, HttpServletResponse response) {
+    public ResFormat refresh(@CookieValue(value = "refresh") Cookie cookie, HttpServletResponse response) {
         Map<String, Object> result = new LinkedHashMap<>();
 
         String token = cookie.getValue();
@@ -38,7 +39,6 @@ public class SecurityController {
             Auth newRefreshToken = securityService.createRefreshToken(accessToken, refreshToken.getSubject());
             securityService.saveRefreshToken(newRefreshToken);
 
-            result.put("msg", "토큰 재발급에 성공했습니다.");
             result.put("token", accessToken);
 
             // 리프래시 토큰 쿠키 주입 !
@@ -48,7 +48,8 @@ public class SecurityController {
             refreshCookie.setHttpOnly(true);
             response.addCookie(refreshCookie);
 
-            return result;
+            return new ResFormat(true, 201L, result);
+
 
         } else{
             //delete

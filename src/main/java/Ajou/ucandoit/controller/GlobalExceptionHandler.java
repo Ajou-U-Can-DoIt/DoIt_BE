@@ -1,6 +1,7 @@
 package Ajou.ucandoit.controller;
 
 
+import Ajou.ucandoit.util.ResFormat;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,10 +14,8 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    public Map<String , String> handleException(Exception e) {
-        Map<String, String> map = new HashMap<>();
-        map.put("ErrMsg", e.getMessage());
-        return map;
+    public ResFormat handleException(Exception e) {
+        return new ResFormat(false, 500L,e.getMessage() );
     }
 
 }

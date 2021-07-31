@@ -22,45 +22,60 @@ import java.util.Optional;
 public class TodoController {
     private TodoService todoService;
 
-    @Autowired
     public TodoController(TodoService todoService){
         this.todoService = todoService;
     }
 
     //list형식
     @GetMapping("/{id}")
-    public List<TodoListResponseDto> checkTodo(@PathVariable Long id) {
+    public Map<String, Object> checkTodo(@PathVariable Long id) {
+        Map<String, Object> result = new LinkedHashMap<>();
         List<TodoListResponseDto> todoList = todoService.getTodoList(id);
-        return todoList;
+
+        result.put("msg", "success");
+        result.put("status", 200);
+        result.put("data", todoList);
+        return result;
     }
 
     @PostMapping("/add")
     public Map<String, Object> addTodo(@RequestBody TodoSaveRequestDto todoSaveRequestDto) {
         Map<String, Object> result = new LinkedHashMap<>();
         Long todoId = todoService.saveTodo(todoSaveRequestDto);
-        result.put("msg", "일정 추가 성공");
-        result.put("todoId", todoId);
+        result.put("msg", "success");
+        result.put("status", 200);
+        result.put("data", todoId);
 
         return result;
     }
 
     @PutMapping("/revision")
-    public Long revisionTodo(@RequestBody TodoUpdateRequestDto updateRequestDto) {
-        //Map<String, Object> result = new LinkedHashMap<>();
-        return todoService.update(updateRequestDto);
+    public Map<String, Object> revisionTodo(@RequestBody TodoUpdateRequestDto updateRequestDto) {
+        Map<String, Object> result = new LinkedHashMap<>();
+
+        todoService.update(updateRequestDto);
+
+        result.put("msg", "success");
+        result.put("status", 200);
+        return result;
     }
 
     @DeleteMapping("/delete/{todo_id}")
-    public Long deleteTodo(@PathVariable Long todo_id) {
-        return todoService.delete(todo_id);
+    public Map<String, Object> deleteTodo(@PathVariable Long todo_id) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        todoService.delete(todo_id);
+        result.put("msg", "success");
+        result.put("status", 200);
+        return result;
     }
 
     @GetMapping("/detail/{todo_id}")
     public Map<String, Object> detailTodo(@PathVariable Long todo_id){
         Map<String, Object> result = new LinkedHashMap<>();
         String detail = todoService.getDetail(todo_id);
-        result.put("msg", "상세 일정 조회 성공");
-        result.put("detail", detail);
+        result.put("msg", "success");
+        result.put("status", 200);
+        result.put("data", detail);
 
         return result;
     }

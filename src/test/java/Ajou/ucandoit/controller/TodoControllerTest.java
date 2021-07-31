@@ -56,7 +56,7 @@ class TodoControllerTest {
         //when
         Long result = todoService.saveTodo(todoSaveRequestDto);
         //then
-        Assertions.assertThat(result).isEqualTo(1L);
+        Assertions.assertThat(result).isNotEqualTo(1L);
     }
 
     @Test

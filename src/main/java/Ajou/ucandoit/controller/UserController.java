@@ -79,6 +79,7 @@ public class UserController {
 
         Map<String , Object> result = new HashMap<>();
         result.put("token", token);
+        result.put("nickName", user.getNickName());
 
         return new ResFormat(true,201L,result);
 

@@ -21,12 +21,6 @@ public class TodoUpdateRequestDto {
     private Date end;
 
     private String category;
-
-    //alarm Date 형식 인가용?
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date alarm;
-
-    private String setRepeat;
     private Long star;
     private String content;
     private Long calenderId;
@@ -38,8 +32,6 @@ public class TodoUpdateRequestDto {
                 .start(start)
                 .end(end)
                 .category(category)
-                .alarm(alarm)
-                .setRepeat(setRepeat)
                 .star(star)
                 .content(content)
                 .build();

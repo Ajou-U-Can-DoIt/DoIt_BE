@@ -19,9 +19,8 @@ public class Todo {
 
     private String title;
     private String content;
-    private String category; //List??
-    private Date alarm;
-    private String setRepeat;
+    private String category;
+
     private Long star;
 
     private Date start;

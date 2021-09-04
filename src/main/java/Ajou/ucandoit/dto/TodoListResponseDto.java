@@ -31,10 +31,8 @@ public class TodoListResponseDto {
 
         this.start = formatter.format(entity.getStart());
         this.end = formatter.format(entity.getEnd());
-        this.alarm = formatter.format(entity.getAlarm());
 
         this.category = entity.getCategory();
-        this.set_repeat = entity.getSetRepeat();
         this.star = entity.getStar();
         this.content = entity.getContent();
         this.calendar = entity.getCalendar().getId();

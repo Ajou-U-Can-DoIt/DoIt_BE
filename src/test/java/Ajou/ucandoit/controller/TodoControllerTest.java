@@ -88,20 +88,18 @@ class TodoControllerTest {
                     .title("test1")
                     .content("content1")
                     .calendar(calendar)
-                    .alarm(dateFormat.parse("2000-11-30"))
                     .category("test")
                     .end(dateFormat.parse("2000-11-30"))
                     .start(dateFormat.parse("2000-11-30"))
-                    .setRepeat("test").build());
+                    .build());
             Todo todo2 = todoRepository.save(Todo.builder()
                     .title("test2")
                     .content("content2")
                     .calendar(calendar)
-                    .alarm(dateFormat.parse("2000-11-30"))
                     .category("test")
                     .end(dateFormat.parse("2000-11-30"))
                     .start(dateFormat.parse("2000-11-30"))
-                    .setRepeat("test").build());
+                    .build());
         }
         catch (Exception e){}
 
